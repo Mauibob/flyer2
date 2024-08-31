@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Review Flyer Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; line-height: 1.6; padding: 20px; }
+        .editor { display: flex; gap: 20px; }
+        .form, .preview { flex: 1; }
+        .form input[type="text"] { width: 100%; padding: 5px; margin-bottom: 10px; }
+        .preview { 
+            border: 1px solid #ccc; 
+            padding: 20px; 
+            width: 400px; 
+            height: 600px; 
+            position: relative;
+            background-color: #f9f9f9;
+        }
+        .header { 
+            font-family: 'Caveat', cursive;
+            font-size: 48px; 
+            font-weight: bold;
+            position: absolute;
+            top: 40px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+        }
+        .instruction { 
+            font-size: 18px; 
+            font-weight: bold;
+            position: absolute;
+            top: 130px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+        }
+        #qrCodePreview { 
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .delivery-info { 
+            font-size: 16px;
+            position: absolute;
+            bottom: 140px;
+            left: 20px;
+        }
+        .delivery-person { 
+            font-family: 'Caveat', cursive;
+            font-size: 36px; 
+            color: blue;
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+        }
+        .delivery-person::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: #000;
+            margin-top: 5px;
+        }
+        .website { 
+            font-size: 16px; 
+            font-weight: bold;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pizza Review Flyer Editor</h1>
+    <div class="editor">
+        <div class="form">
+            <h2>Edit Flyer Content</h2>
+            <label for="header">Header:</label>
+            <input type="text" id="header" value="How did we dough?">
+
+            <label for="instruction">Instruction:</label>
+            <input type="text" id="instruction" value="Follow the QR code to review us on Google or search 'Romeo's Ashland.'">
+
+            <label for="deliveryInfo">Delivery Information:</label>
+            <input type="text" id="deliveryInfo" value="Delivered with care by:">
+
+            <label for="deliveryPerson">Delivery Person's Name:</label>
+            <input type="text" id="deliveryPerson" value="Bob">
+
+            <label for="website">Website URL:</label>
+            <input type="text" id="website" value="RomeosPizza.com">
+
+            <label for="cta">Call-to-Action:</label>
+            <input type="text" id="cta" value="LEAVE US A REVIEW">
+
+            <label for="qrCode">QR Code Image:</label>
+            <input type="file" id="qrCode" accept="image/*">
+        </div>
+        <div class="preview">
+            <div id="previewContent">
+                <div class="header" id="headerPreview">How did we dough?</div>
+                <div class="instruction" id="instructionPreview">Follow the QR code to review us on Google or search "Romeo's Ashland."</div>
+                <img id="qrCodePreview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="QR Code">
+                <div class="delivery-info" id="deliveryInfoPreview">Delivered with care by:</div>
+                <div class="delivery-person" id="deliveryPersonPreview">Bob</div>
+                <div class="website" id="websitePreview">RomeosPizza.com | LEAVE US A REVIEW</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updatePreview() {
+            document.getElementById('headerPreview').textContent = document.getElementById('header').value;
+            document.getElementById('instructionPreview').textContent = document.getElementById('instruction').value;
+            document.getElementById('deliveryInfoPreview').textContent = document.getElementById('deliveryInfo').value;
+            document.getElementById('deliveryPersonPreview').textContent = document.getElementById('deliveryPerson').value;
+            document.getElementById('websitePreview').textContent = `${document.getElementById('website').value} | ${document.getElementById('cta').value}`;
+        }
+
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        document.getElementById('qrCode').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('qrCodePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
